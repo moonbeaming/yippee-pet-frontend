@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Dialog } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import ResetDialog from "./ResetDialog";
+import axios from "axios";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
@@ -89,6 +90,14 @@ const Dashboard = () => {
     console.log("hap and hunger are terrible");
     setHealthPenalty(20);
   }
+
+  useEffect(() => {
+    console.log("starting to fetch name");
+    axios
+      .get("/whatever")
+      .then((res) => console.log(res, "fetched name is here"))
+      .catch((err) => console.log("issue with fetching name"));
+  }, []);
 
   useEffect(() => {
     const timeoutID = setTimeout(() => {
