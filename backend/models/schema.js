@@ -9,7 +9,7 @@ const petSchema = new mongoose.Schema({
   speed: String,
 });
 
-const Pet = mongoose.model("Pet", petSchema);
+const pet = mongoose.model("Pet", petSchema);
 
-module.exports = Pet;
+module.exports = pet;
 // _id: mongoose.Schema.Types.ObjectId,

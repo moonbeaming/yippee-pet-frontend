@@ -8,17 +8,41 @@ const cors = require("cors");
 require("dotenv").config();
 
 app.use(cors());
+app.use(express.json());
 connectDB();
 
 app.get("/", (req, res) => {
   res.json({ message: "hello world" });
 });
 
-app.get("/pets", async (req, res) => {
+app.post("/createload", async (req, res) => {
   try {
-    const pets = await Pet.find(); // Retrieve all users
-    res.json(pets);
-    console.log(pets, "this is what users got");
+    const petName = req.body.petName;
+    console.log(typeof petName, "we getting there");
+    const pet = await Pet.find({ name: petName }); // Find pet in db, if any
+    if (pet.length !== 0) {
+      res.send({ message: "Pet exists", data: pet[0] });
+    } else {
+      // create entry in db
+      res.send({ message: "Pet does not exist" });
+      console.log("aint nothing in db");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.post("/pet", async (req, res) => {
+  try {
+    const petName = req.body.petName;
+    console.log(typeof petName, "we getting there");
+    const pet = await Pet.find({ name: petName }); // Retrieve all users
+    if (pet.length !== 0) {
+      res.send(pet[0]);
+    } else {
+      console.log("aint nothing in db");
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });

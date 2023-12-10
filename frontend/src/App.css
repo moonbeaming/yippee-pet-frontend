@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  font-family: 'Gaegu', sans-serif;
+  font-size: 1.5rem;
 }
 
 .App-logo {
@@ -35,4 +37,44 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.create-dialog {
+  width: 60%;
+}
+
+.dashboard {
+  text-align: center;
+}
+
+.name-div {
+  /* display: flex; */
+  
+}
+
+.pet-stats {
+  width: 50%;
+  margin: auto;
+}
+
+.stat-div {
+  display: flex;
+  flex-direction: row;
+}
+
+.stat-label {
+  width: 100%;
+  max-width: 100px;
+  text-align: left;
+}
+
+.stat-bar {
+  width: 100%;
+  max-width: 500px;
+  align-items: flex-end;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
 }

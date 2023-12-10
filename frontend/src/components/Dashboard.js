@@ -2,10 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Button, Dialog } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import ResetDialog from "./ResetDialog";
-import axios from "axios";
+import CreateDialog from "./CreateDialog";
+import api from "../axiosConfig";
+import "../App.css";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
 
 const Dashboard = () => {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
+  const [isStartingModalOpen, setIsStartingModalOpen] = useState(true);
+
   const [name, setName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [age, setAge] = useState(0);
@@ -19,6 +27,16 @@ const Dashboard = () => {
     useState(1);
   const [speed, setSpeed] = useState(1);
   const [isResettingGame, setIsResettingGame] = useState(false);
+
+  const customStyles = {
+    "& .MuiInputBase-root": {
+      border: "2px solid red", // Change the border style and color here
+      borderRadius: "8px", // Add border radius if needed
+    },
+    "& .MuiInputBase-root:hover": {
+      border: "2px solid blue", // Change border on hover if desired
+    },
+  };
 
   const increaseAge = () => {
     setHealthPenalty((prevPenalty) => {
@@ -46,57 +64,84 @@ const Dashboard = () => {
     });
   };
 
-  switch (health) {
-    case health >= 0 && health < 20:
-      console.log("lowest health");
-      setHappinessPenaltyMultiplier(0.5);
-      break;
-    case health >= 20 && health < 50:
-      console.log("medium health");
-      setHappinessPenaltyMultiplier(0.75);
-      break;
-    case health >= 50 && health <= 100:
-      console.log("highest health");
-      setHappinessPenaltyMultiplier(1);
-      break;
-    default:
-      console.log("this is default ig");
-  }
+  useEffect(() => {
+    onHealthChange();
+  }, [health]);
 
-  switch (happiness) {
-    case happiness >= 0 && happiness < 20:
-      console.log("lowest happiness");
-      setHungerPenalty(20);
-      break;
-    case happiness >= 20 && happiness < 50:
-      console.log("medium happiness");
-      setHungerPenalty(10);
-      break;
-    case happiness >= 50 && happiness < 100:
-      console.log("highest happiness");
-      setHungerPenalty(0);
-      break;
-    default:
-      console.log("this is default ig");
-  }
+  const onHealthChange = () => {
+    switch (health) {
+      case health >= 0 && health < 20:
+        console.log("lowest health");
+        setHappinessPenaltyMultiplier(0.5);
+        break;
+      case health >= 20 && health < 50:
+        console.log("medium health");
+        setHappinessPenaltyMultiplier(0.75);
+        break;
+      case health >= 50 && health <= 100:
+        console.log("highest health");
+        setHappinessPenaltyMultiplier(1);
+        break;
+      default:
+        console.log("this is default ig");
+        break;
+    }
+  };
 
-  if (happiness > hunger * 2 && happiness >= 50) {
-    console.log("hap and hunger still ideal");
-    setHealthPenalty(0);
-  } else if (happiness > hunger && happiness >= 50) {
-    console.log("hap and hunger are only acceptable");
-    setHealthPenalty(10);
-  } else {
-    console.log("hap and hunger are terrible");
-    setHealthPenalty(20);
-  }
+  useEffect(() => {
+    onHappinessChange();
+  }, [happiness]);
+
+  const onHappinessChange = () => {
+    switch (happiness) {
+      case happiness >= 0 && happiness < 20:
+        console.log("lowest happiness");
+        setHungerPenalty(20);
+        break;
+      case happiness >= 20 && happiness < 50:
+        console.log("medium happiness");
+        setHungerPenalty(10);
+        break;
+      case happiness >= 50 && happiness < 100:
+        console.log("highest happiness");
+        setHungerPenalty(0);
+        break;
+      default:
+        console.log("this is default ig");
+        break;
+    }
+  };
+
+  useEffect(() => {
+    onHapHungerChange();
+  }, [happiness, hunger]);
+
+  const onHapHungerChange = () => {
+    if (happiness > hunger * 2 && happiness >= 50) {
+      console.log("hap and hunger still ideal");
+      setHealthPenalty(0);
+    } else if (happiness > hunger && happiness >= 50) {
+      console.log("hap and hunger are only acceptable");
+      setHealthPenalty(10);
+    } else {
+      console.log("hap and hunger are terrible");
+      setHealthPenalty(20);
+    }
+  };
 
   useEffect(() => {
     console.log("starting to fetch name");
-    axios
-      .get("/whatever")
-      .then((res) => console.log(res, "fetched name is here"))
-      .catch((err) => console.log("issue with fetching name"));
+    api
+      .post("/pet", { petName: "yip" })
+      .then((res) => {
+        setName(res.data.name);
+        setAge(parseInt(res.data.age));
+        setHealth(parseInt(res.data.health));
+        setHunger(parseInt(res.data.hunger));
+        setHappiness(parseInt(res.data.happiness));
+        setSpeed(parseInt(res.data.speed));
+      })
+      .catch((err) => console.log("issue with retrieving info"));
   }, []);
 
   useEffect(() => {
@@ -180,35 +225,83 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      <div>sprite here</div>
-      <div>
-        pet info
-        <div>name</div>
-        <div>{name}</div>
-        <div>age</div>
-        <div>{age}</div>
-        <div>health</div>
-        <LinearProgress
-          value={health}
-          variant="determinate"
-          sx={{ height: "20px" }}
+    <div className="dashboard">
+      <div className="name-div">
+        <div>name:</div>
+        <TextField
+          className="name-text-field"
+          placeholder="Name"
+          onClick={() => onEditingName()}
+          onChange={(e) => onChangeName(e)}
+          readOnly={!isEditingName}
+          inputProps={{
+            spellCheck: "false",
+            style: {
+              fontFamily: "Gaegu",
+              // borderRadius: "0px",
+              width: "20vw",
+              height: "4vh",
+              padding: "0px 0px 0px 6px",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "red", // Change the border color here
+                  borderWidth: "2px", // Change the border width here
+                },
+                "&:hover fieldset": {
+                  borderColor: "blue", // Change border color on hover
+                },
+              },
+            },
+          }}
         />
-        <div>hunger</div>
-        <LinearProgress
-          value={hunger}
-          variant="determinate"
-          sx={{ height: "20px" }}
-        />
-        <div>happiness</div>
-        <LinearProgress
-          value={happiness}
-          variant="determinate"
-          sx={{ height: "20px" }}
-        />
+        {isEditingName ? (
+          <Button onClick={() => onSaveName()}>
+            <SaveOutlinedIcon />
+          </Button>
+        ) : (
+          <IconButton onClick={() => onEditingName()}>
+            <EditOutlinedIcon />
+          </IconButton>
+        )}
       </div>
-      <div>
-        interactions
+
+      <div className="sprite">!!sprite here!!</div>
+      <div className="pet-info">
+        <div>
+          <div>age</div>
+          <div>{age}</div>
+        </div>
+        <div className="pet-stats">
+          <div className="stat-div">
+            <div className="stat-label">health</div>
+            <LinearProgress
+              value={health}
+              variant="determinate"
+              sx={{ height: "20px" }}
+              className="stat-bar"
+            />
+          </div>
+          <div className="stat-div">
+            <div className="stat-label">hunger</div>
+            <LinearProgress
+              value={hunger}
+              variant="determinate"
+              sx={{ height: "20px" }}
+              className="stat-bar"
+            />
+          </div>
+          <div className="stat-div">
+            <div className="stat-label">happiness</div>
+            <LinearProgress
+              value={happiness}
+              variant="determinate"
+              sx={{ height: "20px" }}
+              className="stat-bar"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="action-buttons">
         <div>clean</div>
         <Button onClick={() => onClickClean()} />
         <div>feed</div>
@@ -216,29 +309,23 @@ const Dashboard = () => {
         <div>play</div>
         <Button onClick={() => onClickPlay()} />
       </div>
-      <div>
-        game control
+      <div className="game-control">
         <div>speed control</div>
         <Button onClick={() => onDecSpeed()}>-</Button>
         <input placeholder="Speed" value={speed} />
         <Button onClick={() => onIncSpeed()}>+</Button>
-        <div>Change pet name</div>
-        <input
-          placeholder="Name"
-          onClick={() => onEditingName()}
-          onChange={(e) => onChangeName(e)}
-          readOnly={!isEditingName}
-        />
-        {isEditingName ? (
-          <Button onClick={() => onSaveName()}>Save</Button>
-        ) : (
-          <Button onClick={() => onEditingName()}>Edit Name</Button>
-        )}
-        <div>game reset button</div>
-        <Button onClick={() => onClickResetGame()}>Reset</Button>
       </div>
+      <div>
+        <Button onClick={() => onClickResetGame()}>Reset Game</Button>
+      </div>
+
       {isResettingGame ? (
         <ResetDialog setIsResettingGame={setIsResettingGame} />
+      ) : (
+        <div />
+      )}
+      {isStartingModalOpen ? (
+        <CreateDialog setIsStartingModalOpen={setIsStartingModalOpen} />
       ) : (
         <div />
       )}
