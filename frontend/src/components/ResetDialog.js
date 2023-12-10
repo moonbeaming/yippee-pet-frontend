@@ -3,6 +3,8 @@ import React, { useState } from "react";
 
 const ResetDialog = (props) => {
   const setIsResettingGame = props.setIsResettingGame;
+  const setIsCreatePet = props.setIsCreatePet;
+
   //   const onReset = () => {
   //     setIsResettingGame(true);
   //     setName("");
@@ -16,13 +18,14 @@ const ResetDialog = (props) => {
     <div>
       <Dialog open>
         Are you sure you want to reset the game? All your progress will be lost!
-        <Button>Reset Game</Button>
+        <Button>Go Back</Button>
         <Button
           onClick={() => {
             setIsResettingGame(false);
+            setIsCreatePet(true);
           }}
         >
-          Go Back
+          Reset Game
         </Button>
       </Dialog>
     </div>

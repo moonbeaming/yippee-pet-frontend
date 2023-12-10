@@ -47,9 +47,12 @@
   text-align: center;
 }
 
+.empty-dashboard {
+  display: none;
+}
+
 .name-div {
   /* display: flex; */
-  
 }
 
 .pet-stats {

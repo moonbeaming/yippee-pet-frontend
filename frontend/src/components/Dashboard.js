@@ -2,18 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Button, Dialog } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import ResetDialog from "./ResetDialog";
-import CreateDialog from "./CreateDialog";
 import api from "../axiosConfig";
 import "../App.css";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
+import DeathDialog from "./DeathDialog";
+import StartingDialog from "./StartingDialog";
+import CreateDialog from "./CreateDialog";
+
+import LoadDialog from "./LoadDialog";
 
 const Dashboard = () => {
-  // const [open, setOpen] = useState(false);
   const [isStartingModalOpen, setIsStartingModalOpen] = useState(true);
-
+  const [isDeathDialogOpen, setIsDeathDialogOpen] = useState(false);
   const [name, setName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [age, setAge] = useState(0);
@@ -27,6 +30,8 @@ const Dashboard = () => {
     useState(1);
   const [speed, setSpeed] = useState(1);
   const [isResettingGame, setIsResettingGame] = useState(false);
+  const [isCreatePet, setIsCreatePet] = useState(false);
+  const [isLoadPet, setIsLoadPet] = useState(false);
 
   const customStyles = {
     "& .MuiInputBase-root": {
@@ -145,9 +150,16 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    const timeoutID = setTimeout(() => {
-      age > 9 ? onDeath(timeoutID) : increaseAge();
-    }, ageUpDuration);
+    const timeoutID =
+      name.trim().length > 0
+        ? setTimeout(() => {
+            console.log("testing");
+            age > 9 ? onDeath(timeoutID) : increaseAge();
+          }, ageUpDuration)
+        : () => {
+            console.log("no pet loaded");
+            return null;
+          };
   }, [age]);
 
   useEffect(() => {
@@ -156,6 +168,7 @@ const Dashboard = () => {
 
   const onDeath = (timeoutID) => {
     clearTimeout(timeoutID);
+    setIsDeathDialogOpen(true);
   };
 
   const onChangeName = (e) => {
@@ -225,7 +238,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div className={name.length !== 0 ? "dashboard" : "empty-dashboard"}>
       <div className="name-div">
         <div>name:</div>
         <TextField
@@ -320,12 +333,44 @@ const Dashboard = () => {
       </div>
 
       {isResettingGame ? (
-        <ResetDialog setIsResettingGame={setIsResettingGame} />
+        <ResetDialog
+          setIsResettingGame={setIsResettingGame}
+          setIsCreatePet={setIsCreatePet}
+        />
       ) : (
         <div />
       )}
       {isStartingModalOpen ? (
-        <CreateDialog setIsStartingModalOpen={setIsStartingModalOpen} />
+        <StartingDialog
+          setIsStartingModalOpen={setIsStartingModalOpen}
+          setIsCreatePet={setIsCreatePet}
+          setIsLoadPet={setIsLoadPet}
+        />
+      ) : (
+        <div />
+      )}
+      {isCreatePet ? (
+        <CreateDialog
+          setIsCreatePet={setIsCreatePet}
+          setIsStartingModalOpen={setIsStartingModalOpen}
+        />
+      ) : (
+        <div />
+      )}
+      {isLoadPet ? (
+        <LoadDialog
+          setIsLoadPet={setIsLoadPet}
+          setIsStartingModalOpen={setIsStartingModalOpen}
+        />
+      ) : (
+        <div />
+      )}
+
+      {isDeathDialogOpen ? (
+        <DeathDialog
+          setIsDeathDialogOpen={setIsDeathDialogOpen}
+          setIsResettingGame={setIsResettingGame}
+        />
       ) : (
         <div />
       )}

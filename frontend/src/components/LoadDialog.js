@@ -4,13 +4,12 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect } from "react";
 
-const CreateDialog = (props) => {
-  const { setIsStartingModalOpen, setIsCreatePet } = props;
+const LoadDialog = (props) => {
+  const { setIsStartingModalOpen, setIsLoadPet } = props;
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
-  const onCreatePet = () => {
-    // api post call to send name
-    // if name exists, small text below input to ask if wanna load
+  const onLoadPet = () => {
+    // api post call to check for name
     // if
     setIsStartingModalOpen(false);
 
@@ -23,7 +22,7 @@ const CreateDialog = (props) => {
   };
 
   const onClickBack = () => {
-    setIsCreatePet(false);
+    setIsLoadPet(false);
     setIsStartingModalOpen(true);
   };
 
@@ -38,7 +37,7 @@ const CreateDialog = (props) => {
   }, [isSnackBarOpen]);
 
   return (
-    <div className="create-dialog">
+    <div className="load-dialog">
       {isSnackBarOpen ? (
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -49,7 +48,7 @@ const CreateDialog = (props) => {
               onClickClose();
             }}
           >
-            That pet already exists. Did you mean to load it?
+            That pet does not exist yet. Did you mean to create it?
           </Alert>
         </Snackbar>
       ) : (
@@ -66,11 +65,17 @@ const CreateDialog = (props) => {
             <ArrowBackIcon />
           </IconButton>
           <TextField />
-          <Button onClick={() => onCreatePet()}>Create</Button>
+          <Button
+            onClick={() => {
+              onLoadPet();
+            }}
+          >
+            Load
+          </Button>
         </div>
       </Dialog>
     </div>
   );
 };
 
-export default CreateDialog;
+export default LoadDialog;
