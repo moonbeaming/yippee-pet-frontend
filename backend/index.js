@@ -17,15 +17,23 @@ app.get("/", (req, res) => {
 
 app.post("/createload", async (req, res) => {
   try {
-    const petName = req.body.petName;
-    console.log(typeof petName, "we getting there");
+    const petName = req.body.name;
     const pet = await Pet.find({ name: petName }); // Find pet in db, if any
     if (pet.length !== 0) {
-      res.send({ message: "Pet exists", data: pet[0] });
+      res.send({
+        message: "Pet exists",
+        data: pet[0],
+        createInsteadAlert: false,
+        loadInsteadAlert: true,
+      });
+      console.log("we dids it");
     } else {
       // create entry in db
-      res.send({ message: "Pet does not exist" });
-      console.log("aint nothing in db");
+      res.send({
+        message: "Pet does not exist",
+        createInsteadAlert: true,
+        loadInsteadAlert: false,
+      });
     }
   } catch (error) {
     console.error(error);

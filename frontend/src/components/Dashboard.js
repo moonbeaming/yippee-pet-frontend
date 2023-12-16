@@ -17,6 +17,7 @@ import LoadDialog from "./LoadDialog";
 const Dashboard = () => {
   const [isStartingModalOpen, setIsStartingModalOpen] = useState(true);
   const [isDeathDialogOpen, setIsDeathDialogOpen] = useState(false);
+  const [petData, setPetData] = useState({});
   const [name, setName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [age, setAge] = useState(0);
@@ -157,7 +158,6 @@ const Dashboard = () => {
             age > 9 ? onDeath(timeoutID) : increaseAge();
           }, ageUpDuration)
         : () => {
-            console.log("no pet loaded");
             return null;
           };
   }, [age]);
@@ -353,6 +353,7 @@ const Dashboard = () => {
         <CreateDialog
           setIsCreatePet={setIsCreatePet}
           setIsStartingModalOpen={setIsStartingModalOpen}
+          setPetData={setPetData}
         />
       ) : (
         <div />
@@ -361,6 +362,7 @@ const Dashboard = () => {
         <LoadDialog
           setIsLoadPet={setIsLoadPet}
           setIsStartingModalOpen={setIsStartingModalOpen}
+          setPetData={setPetData}
         />
       ) : (
         <div />

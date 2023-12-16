@@ -3,16 +3,28 @@ import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect } from "react";
+import axios from "axios";
 
 const CreateDialog = (props) => {
-  const { setIsStartingModalOpen, setIsCreatePet } = props;
+  const { setIsStartingModalOpen, setIsCreatePet, setPetData } = props;
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+  const [nameInCreation, setNameInCreation] = useState("");
 
-  const onCreatePet = () => {
+  const onCreatePetName = (e) => {
+    setNameInCreation(e.target.value);
+  };
+
+  const onCreatePet = async () => {
     // api post call to send name
-    // if name exists, small text below input to ask if wanna load
-    // if
-    setIsStartingModalOpen(false);
+    try {
+      const response = await axios.post("http://localhost:3001/createload", {
+        name: nameInCreation,
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+    // setIsStartingModalOpen(false);
 
     // else
     setIsSnackBarOpen(true);
@@ -65,7 +77,12 @@ const CreateDialog = (props) => {
           >
             <ArrowBackIcon />
           </IconButton>
-          <TextField />
+          <TextField
+            value={nameInCreation}
+            onChange={(e) => {
+              onCreatePetName(e);
+            }}
+          />
           <Button onClick={() => onCreatePet()}>Create</Button>
         </div>
       </Dialog>

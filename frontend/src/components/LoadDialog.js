@@ -5,7 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect } from "react";
 
 const LoadDialog = (props) => {
-  const { setIsStartingModalOpen, setIsLoadPet } = props;
+  const { setIsStartingModalOpen, setIsLoadPet, setPetData } = props;
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
   const onLoadPet = () => {
