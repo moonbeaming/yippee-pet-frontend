@@ -2,45 +2,131 @@
   text-align: center;
   font-family: 'Gaegu', sans-serif;
   font-size: 1.5rem;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+  background-color: rgb(244, 222, 161);
   min-height: 100vh;
+}
+
+.starting-modal {
+  background-color: rgb(61, 30, 2);
+  width: 100%;
+  max-width: 800px;
+  height: 100%;
+  max-height: 400px;
+  margin: auto;
+  border-radius: 20px;
+  padding: 30px;
+  /* position: relative; */
+}
+
+.starting-modal-parent {
+  display: flex;
+}
+
+/* credits to https://css-generators.com/custom-borders/ for the custom borders */
+
+.starting-modal-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(251, 212, 112);
+  justify-content: center;
+  align-items: center;
+  --mask: 
+    linear-gradient(#000 0 0) 50%/calc(100% - 30px) calc(100% - 30px) no-repeat,
+    radial-gradient(15px,#0000 98%,#000) 0 -15px/27.75px 30px round no-repeat,
+    radial-gradient(15px,#0000 98%,#000) 0 calc(100% + 15px)/27.75px 30px round no-repeat,
+    radial-gradient(15px,#0000 98%,#000) -15px 0/30px 27.75px no-repeat round,
+    radial-gradient(15px,#0000 98%,#000) calc(100% + 15px) 0/30px 27.75px no-repeat round;
+  clip-path: polygon(30px 0,calc(100% - 30px) 0,100% 30px,100% calc(100% - 30px),calc(100% - 30px) 100%,30px 100%,0 calc(100% - 30px),0 30px);
+  -webkit-mask: var(--mask);
+          mask: var(--mask);
+  /* position: relative; */
+}
+
+.starting-modal-button {
+  width: 12vw;
+}
+
+.starting-modal-button-content {
+  display: flex;
+  width: 100%;
+  padding: 30px;
+  border: rgb(125, 60, 3) solid 10px;
+  box-shadow: #000;
+  border-radius: 60px;
+  background-color: rgb(251, 238, 219);
+  color: #000;
+  justify-content: center;
+}
+
+.starting-modal-shine {
+  width: 0; 
+  height: 0; 
+  border-top: 50px solid rgb(150, 79, 7); 
+  border-right: 50px solid transparent; 
+  border-radius: 100px;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 90px;
+  border-bottom-right-radius: 50%;
+  position: absolute;
+  top: 2vh;
+  left: 2ch;
+  z-index: 2;
+}
+
+.starting-modal-shine-negative {
+  width: 0; 
+  height: 0; 
+  border-top: 30px solid rgb(43, 21, 0); 
+  border-right: 30px solid transparent; 
+  border-radius: 150px;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 200px;
+  position: absolute;
+  top: 3vh;
+  left: 1.9vw;
+  z-index: 2;
+}
+
+.back-button-div {
+  display: flex;
+  /* justify-content: flex-start; */
+  align-items: flex-start;
+  width: 90%;
+  /* padding-bottom: 10%; */
+  padding-top: 20px;
+  padding-right: 20px;
+  flex: 2;
+}
+
+.create-modal-field-and-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 20px;
+  flex: 3;
+}
+
+.create-textfield {
+  padding-bottom: 10px;
+}
+
+.create-button {
+  width: 12vw;
+}
+
+.create-button-content {
+  display: flex;
+  width: 100%;
+  padding: 20px;
+  border: rgb(125, 60, 3) solid 10px;
+  box-shadow: #000;
+  border-radius: 60px;
+  background-color: rgb(251, 238, 219);
+  color: #000;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.create-dialog {
-  width: 60%;
 }
 
 .dashboard {
@@ -48,7 +134,7 @@
 }
 
 .empty-dashboard {
-  display: none;
+  opacity: 0;
 }
 
 .name-div {
@@ -81,3 +167,4 @@
   display: flex;
   justify-content: center;
 }
+

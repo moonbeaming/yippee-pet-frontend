@@ -1,11 +1,11 @@
-import { Dialog, Button, TextField, Alert, Snackbar } from "@mui/material";
+import { Modal, Button, TextField, Alert, Snackbar, Zoom } from "@mui/material";
 import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect } from "react";
 import axios from "axios";
 
-const CreateDialog = (props) => {
+const CreateModal = (props) => {
   const { setIsStartingModalOpen, setIsCreatePet, setPetData } = props;
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
   const [nameInCreation, setNameInCreation] = useState("");
@@ -50,7 +50,7 @@ const CreateDialog = (props) => {
   }, [isSnackBarOpen]);
 
   return (
-    <div className="create-dialog">
+    <div className="create-modal">
       {isSnackBarOpen ? (
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -67,27 +67,43 @@ const CreateDialog = (props) => {
       ) : (
         <div />
       )}
-
-      <Dialog open>
-        <div>
-          <IconButton
-            onClick={() => {
-              onClickBack();
-            }}
-          >
-            <ArrowBackIcon />
-          </IconButton>
-          <TextField
-            value={nameInCreation}
-            onChange={(e) => {
-              onCreatePetName(e);
-            }}
-          />
-          <Button onClick={() => onCreatePet()}>Create</Button>
-        </div>
-      </Dialog>
+      <div>
+        <Modal open hideBackdrop>
+          <Zoom in={true}>
+            <div className="starting-modal">
+              <div className="starting-modal-content create-modal">
+                <div className="back-button-div">
+                  <IconButton
+                    onClick={() => {
+                      onClickBack();
+                    }}
+                  >
+                    <ArrowBackIcon />
+                  </IconButton>
+                </div>
+                <div className="create-modal-field-and-btn">
+                  <div className="create-textfield">
+                    <TextField
+                      value={nameInCreation}
+                      onChange={(e) => {
+                        onCreatePetName(e);
+                      }}
+                    />
+                  </div>
+                  <Button
+                    className="create-button"
+                    onClick={() => onCreatePet()}
+                  >
+                    <div className="create-button-content">Create Pet</div>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Zoom>
+        </Modal>
+      </div>
     </div>
   );
 };
 
-export default CreateDialog;
+export default CreateModal;

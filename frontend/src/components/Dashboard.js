@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Dialog } from "@mui/material";
+import { Button } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import ResetDialog from "./ResetDialog";
 import api from "../axiosConfig";
@@ -9,10 +9,9 @@ import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import DeathDialog from "./DeathDialog";
-import StartingDialog from "./StartingDialog";
-import CreateDialog from "./CreateDialog";
-
-import LoadDialog from "./LoadDialog";
+import StartingModal from "./StartingModal";
+import CreateModal from "./CreateModal";
+import LoadModal from "./LoadModal";
 
 const Dashboard = () => {
   const [isStartingModalOpen, setIsStartingModalOpen] = useState(true);
@@ -238,7 +237,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className={name.length !== 0 ? "dashboard" : "empty-dashboard"}>
+    // <div className={name.length !== 0 ? "dashboard" : "empty-dashboard"}>
+    <div className="dashboard">
       <div className="name-div">
         <div>name:</div>
         <TextField
@@ -340,17 +340,17 @@ const Dashboard = () => {
       ) : (
         <div />
       )}
-      {isStartingModalOpen ? (
-        <StartingDialog
+      {/* {isStartingModalOpen ? (
+        <StartingModal
           setIsStartingModalOpen={setIsStartingModalOpen}
           setIsCreatePet={setIsCreatePet}
           setIsLoadPet={setIsLoadPet}
         />
       ) : (
         <div />
-      )}
+      )} */}
       {isCreatePet ? (
-        <CreateDialog
+        <CreateModal
           setIsCreatePet={setIsCreatePet}
           setIsStartingModalOpen={setIsStartingModalOpen}
           setPetData={setPetData}
@@ -359,7 +359,7 @@ const Dashboard = () => {
         <div />
       )}
       {isLoadPet ? (
-        <LoadDialog
+        <LoadModal
           setIsLoadPet={setIsLoadPet}
           setIsStartingModalOpen={setIsStartingModalOpen}
           setPetData={setPetData}
